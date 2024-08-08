@@ -1,23 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>SWAPI Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        #content {
+            white-space: pre-wrap;
+            /* Keeps formatting for JSON */
+        }
+    </style>
 </head>
+
 <body>
+    <h1>SWAPI Data</h1>
     <div id="content"></div>
     <script>
         fetch("https://ci-swapi.herokuapp.com/api/")
-        .then(response => response.text())
-        .then(data => displayData(data))
-        .catch((e) => {
-            console.error("Error: ", e);
-        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); // Parse the response as JSON
+            })
+            .then(data => displayData(data))
+            .catch((e) => {
+                console.error("Error: ", e);
+                document.getElementById("content").innerText = `Error: ${e.message}`;
+            });
 
         function displayData(data) {
-            document.getElementById("content").innerText = data;
+            // Convert the JSON object to a pretty-printed string
+            const formattedData = JSON.stringify(data, null, 2);
+            document.getElementById("content").innerText = formattedData;
         }
     </script>
 </body>
+
 </html>
